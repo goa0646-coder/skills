@@ -1,5 +1,6 @@
 #!/bin/bash
-# Install the skills from goa0646-coder/ponytail and goa0646-coder/skills into
+# Install the skills from goa0646-coder/ponytail, goa0646-coder/skills and
+# goa0646-coder/prompt-master into
 # ~/.claude/skills so they are available in every cloud session.
 set -euo pipefail
 
@@ -38,4 +39,12 @@ install_skills() {
 
 p=$(repo_dir ponytail); [ -n "$p" ] && install_skills "$p/skills"
 s=$(repo_dir skills);   [ -n "$s" ] && install_skills "$s/skills"
+
+# prompt-master keeps its SKILL.md at the repo root.
+m=$(repo_dir prompt-master)
+if [ -n "$m" ] && [ -f "$m/SKILL.md" ]; then
+  rm -rf "$dest/prompt-master"
+  mkdir -p "$dest/prompt-master"
+  cp -r "$m/SKILL.md" "$m/references" "$dest/prompt-master/" 2>/dev/null || true
+fi
 exit 0
